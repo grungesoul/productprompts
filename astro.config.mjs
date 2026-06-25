@@ -4,27 +4,19 @@ import mdx from '@astrojs/mdx';
 import tailwindcss from '@tailwindcss/vite';
 
 // ---------------------------------------------------------------------------
-// GitHub Pages config — EDIT THESE TWO LINES when you create the repo.
+// Hosting config — deployed on Vercel as a static site.
 //
-//   SITE  = https://<your-username>.github.io
-//   BASE  = '/<repo-name>'   (the path the project page is served from)
+//   SITE = the canonical production URL (used for absolute URLs / OG tags).
+//   base = '/'  — Vercel serves from the root, so no sub-path gymnastics.
 //
-// Configured for: repo "productprompts" under user "grungesoul".
-//   → live at https://grungesoul.github.io/productprompts
-//
-// If you later attach a custom domain (e.g. productprompts.davidjordan.es),
-// set SITE to that domain and BASE to '/'.
+// If you later attach a custom domain (e.g. getproductprompts.com), just set
+// SITE to that domain; base stays '/'.
 // ---------------------------------------------------------------------------
-const SITE = 'https://grungesoul.github.io';
-const BASE = '/productprompts';
-
-// Apply the GitHub Pages sub-path only for production builds, so `astro dev`
-// still serves cleanly from the root during local development.
-const isProd = process.env.NODE_ENV === 'production';
+const SITE = 'https://productprompts.vercel.app';
 
 export default defineConfig({
   site: SITE,
-  base: isProd ? BASE : '/',
+  base: '/',
   integrations: [mdx()],
   vite: {
     plugins: [tailwindcss()],
