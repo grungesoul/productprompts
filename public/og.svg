@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f172a" />
+      <stop offset="1" stop-color="#1e1b4b" />
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.1" r="0.7">
+      <stop offset="0" stop-color="#6366f1" stop-opacity="0.45" />
+      <stop offset="1" stop-color="#6366f1" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <rect width="1200" height="630" fill="url(#glow)" />
+
+  <g transform="translate(90, 96)">
+    <rect width="64" height="64" rx="16" fill="#4f46e5" />
+    <polyline points="22,20 34,32 22,44" fill="none" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" stroke-linejoin="round" />
+    <rect x="36" y="40" width="12" height="5.2" rx="2.6" fill="#ffffff" />
+    <text x="84" y="44" font-family="system-ui, sans-serif" font-size="30" font-weight="800" fill="#ffffff">Product<tspan fill="#a5b4fc">Prompts</tspan></text>
+  </g>
+
+  <text x="90" y="300" font-family="system-ui, sans-serif" font-size="76" font-weight="800" fill="#ffffff">Tune your prompt</text>
+  <text x="90" y="392" font-family="system-ui, sans-serif" font-size="76" font-weight="800" fill="#818cf8">to the model.</text>
+
+  <text x="90" y="470" font-family="system-ui, sans-serif" font-size="30" font-weight="400" fill="#cbd5e1">A prompting guide for product leaders — Claude · ChatGPT · Gemini.</text>
+  <text x="90" y="514" font-family="system-ui, sans-serif" font-size="30" font-weight="400" fill="#cbd5e1">Get the output you expect, in fewer tokens.</text>
+
+  <text x="90" y="588" font-family="system-ui, sans-serif" font-size="24" font-weight="600" fill="#64748b">Built by David Jordan · Product Coach · Free &amp; open source</text>
+</svg>

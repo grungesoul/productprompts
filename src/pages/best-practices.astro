@@ -1,0 +1,97 @@
+---
+import Layout from '../layouts/Layout.astro';
+import DavidsTake from '../components/DavidsTake.astro';
+import { withBase } from '../lib/url';
+
+const practices = [
+  {
+    n: '01',
+    title: 'Be explicit — say exactly what you want',
+    body: "Models are not mind-readers. State the audience, the format, the length, and what 'done' looks like. 'Summarise this for a skeptical CFO in 5 bullets, max 15 words each' beats 'summarise this' every time — and it's cheaper, because you don't burn a second round fixing the shape.",
+  },
+  {
+    n: '02',
+    title: 'Show an example of the output you want',
+    body: 'One good example of the format or tone you expect is worth a paragraph of description. Paste a sample row, a sample sentence, or a "good vs bad" pair. The model will match it far more reliably than it will follow an abstract instruction.',
+  },
+  {
+    n: '03',
+    title: 'Structure your context — separate it from your ask',
+    body: 'Keep the material (the transcript, the PRD, the data) visually separate from the instruction. Headings, dashes, or XML-style tags all work. When the model can tell "here is the input" from "here is the task," it stops blending them — and stops re-reading, which saves tokens.',
+  },
+  {
+    n: '04',
+    title: 'Match the model — and the tier — to the job',
+    body: "Don't reach for the flagship by reflex. Rote extraction and tagging are a fast-tier job (Haiku, Flash, Instant). Genuine reasoning and trade-offs are a flagship or reasoning-tier job. Picking the right tier is the single biggest lever on cost for repetitive work.",
+  },
+  {
+    n: '05',
+    title: 'Iterate — your first prompt is a draft',
+    body: "Treat prompting as a short conversation, not a one-shot. If the output is 80% right, say what's off ('too long', 'too generic', 'lead with the risk') rather than rewriting from scratch. Steering an existing answer is faster and cheaper than starting over.",
+  },
+];
+---
+
+<Layout
+  title="Prompting best practices — the model-agnostic fundamentals"
+  description="Five habits that make every prompt better, before you worry about which model you're on."
+>
+  <div class="mx-auto max-w-3xl px-5 py-12">
+    <a
+      href={withBase('/')}
+      class="inline-flex items-center gap-1 text-sm font-medium text-slate-500 transition hover:text-brand-600"
+    >
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+      Home
+    </a>
+
+    <header class="mt-6">
+      <span class="text-xs font-bold uppercase tracking-wider text-brand-600"
+        >The fundamentals</span
+      >
+      <h1 class="mt-1 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
+        Five habits that work on every model
+      </h1>
+      <p class="mt-3 text-base leading-relaxed text-slate-600 dark:text-slate-300">
+        Before you tune for a specific model, get these right. They hold across
+        Claude, ChatGPT, and Gemini — and most "the AI gave me junk" moments
+        trace back to skipping one of them.
+      </p>
+    </header>
+
+    <div class="mt-10 space-y-5">
+      {
+        practices.map((p) => (
+          <div class="flex gap-5 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+            <span class="text-2xl font-extrabold text-brand-200 dark:text-brand-500/40">
+              {p.n}
+            </span>
+            <div>
+              <h2 class="text-lg font-bold text-slate-900 dark:text-white">
+                {p.title}
+              </h2>
+              <p class="mt-1.5 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                {p.body}
+              </p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="mt-8">
+      <DavidsTake
+        text="If I could get teams to internalise just one of these, it's #4. Right-sizing is the most expensive habit to fix because it's invisible until the bill arrives. My own rule of thumb: Haiku for the daily repetitive stuff — emails, scheduling, quick lookups — Sonnet for everyday product work, and I only reach for Opus (or GPT-5.5 Thinking) when the input's ambiguous and a shallow answer would actually cost me."
+      />
+    </div>
+
+    <div class="mt-10 text-center">
+      <a
+        href={withBase('/#models')}
+        class="inline-block rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700"
+      >
+        Now tune for your model →
+      </a>
+    </div>
+  </div>
+</Layout>

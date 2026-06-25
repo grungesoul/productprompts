@@ -1,0 +1,43 @@
+title: Pressure-test a roadmap
+summary: Stress-test a prioritisation before you commit — find the assumption that, if wrong, flips the whole order.
+icon: 🧭
+order: 3
+intro: >-
+  Prioritisation is a reasoning problem, not a writing problem. Reasoning-tier
+  models are built for exactly this: trade-offs, sequencing, and "what are we
+  missing." State the goal and constraints, then get out of the way.
+variants:
+  - model_name: GPT-5.5 Thinking
+    provider: ChatGPT
+    why: >-
+      Purpose-built for multi-step trade-off reasoning. Skip the step-by-step
+      boilerplate — it adds tokens and verbosity without improving the answer.
+    prompt: |-
+      Here is our roadmap and the reasoning behind the ranking:
+      {paste roadmap + rationale}
+      Find the weakest link in this prioritisation. What are we assuming that,
+      if false, would flip the order? Give me the single highest-leverage thing
+      to validate first and why.
+  - model_name: Claude Opus 4.8
+    provider: Claude
+    why: >-
+      Reach for it when the roadmap spans messy, multi-source context and you
+      want a skeptic that holds nuance. The role + stakes framing sharpens the
+      critique.
+    prompt: |-
+      <role>You are a skeptical board member who has seen many roadmaps fail.</role>
+      <roadmap>
+      {paste roadmap + rationale}
+      </roadmap>
+      <task>
+      Name the three scenarios most likely to make this roadmap the wrong bet
+      over the next 12 months. For each, give the leading indicator we'd see
+      first. End with the one thing you'd cut today.
+      </task>
+davids_take: >-
+  This is the "what am I missing in this strategy?" question I lean on most.
+  Opus is my first challenger — its attention to detail surfaces the assumption
+  that, if wrong, flips the whole order. Then GPT-5.5 Thinking is the second
+  opinion; cross-checking one reasoner against the other is how I pressure-test
+  a roadmap I actually care about. One habit to drop: "think step by step" is
+  just noise on a reasoning model.

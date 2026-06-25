@@ -1,0 +1,55 @@
+title: Draft & critique a PRD
+summary: Turn a rough PRD into something that survives exec scrutiny — and find the weak assumptions before someone else does.
+icon: 📄
+order: 1
+intro: >-
+  A PRD is only as strong as its weakest assumption. Use a model to play the
+  skeptic before your stakeholders do. The flagship models reason hardest about
+  hidden risk; a balanced model is plenty for a first tidy-up.
+variants:
+  - model_name: Claude Opus 4.8
+    provider: Claude
+    why: >-
+      Best when the PRD is messy and the stakes are high. The XML structure
+      keeps the document and the task cleanly separated, so it critiques rather
+      than rewrites — and you avoid re-paste loops that burn tokens.
+    prompt: |-
+      <role>You are a seasoned CPO reviewing a PRD before it goes to the board.</role>
+      <prd>
+      {paste your PRD}
+      </prd>
+      <task>
+      Identify the three weakest assumptions. For each: why it's risky, the one
+      question an investor would ask, and how I'd de-risk it in a week. Be
+      blunt. Bullet points only — no summary of the PRD back to me.
+      </task>
+  - model_name: Claude Sonnet 4.6
+    provider: Claude
+    why: >-
+      The right default for a first clean-up pass — fix structure, tighten the
+      problem statement, flag gaps. Cheaper and faster; escalate to Opus only if
+      the critique feels shallow.
+    prompt: |-
+      <prd>
+      {paste your PRD}
+      </prd>
+      Tighten this PRD. Return: (1) a sharper one-sentence problem statement,
+      (2) any section that's missing, (3) three sentences that are vague and
+      how to make them specific. Keep your answer under 200 words.
+  - model_name: GPT-5.5 Thinking
+    provider: ChatGPT
+    why: >-
+      Strong when the hard part is the logic of the bet, not the prose. Don't
+      add "think step by step" — it reasons internally; just give it the goal.
+    prompt: |-
+      Here is a PRD and the rationale for building it:
+      {paste PRD + rationale}
+      What single assumption, if false, would make this the wrong thing to
+      build? Give me that assumption, the cheapest way to test it this week, and
+      what result would tell us to stop.
+davids_take: >-
+  This is the Opus job in miniature — I use it as the challenger that finds the
+  weak assumption before a stakeholder does. My flow: draft and tidy on Sonnet,
+  then hand the finished PRD to Opus with "what's the riskiest assumption here,
+  and what would an investor ask?" If it's a genuine bet, I run it past GPT-5.5
+  Thinking too — a second frontier reasoner catches what the first misses.

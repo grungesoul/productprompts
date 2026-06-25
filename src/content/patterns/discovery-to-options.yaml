@@ -1,0 +1,43 @@
+title: Turn discovery findings into options
+summary: Map validated findings into an opportunity-solution tree — and flag which solutions are still untested assumptions.
+icon: 🌳
+order: 5
+intro: >-
+  The value here is structure plus honesty: grouping findings into
+  opportunities, proposing solutions, and being explicit about what's still a
+  guess. A capable reasoning model keeps the tree coherent; the key is asking it
+  to separate evidence from assumption.
+variants:
+  - model_name: Gemini 3.1 Pro
+    provider: Gemini
+    why: >-
+      A stable, capable reasoner — a dependable choice when you want a
+      repeatable discovery workflow rather than the newest model. Handles the
+      tree structure cleanly.
+    prompt: |-
+      Here are our validated discovery findings:
+      {paste findings}
+      Map these into an opportunity-solution tree: the top 3 opportunities, and
+      2–3 candidate solutions under each. Clearly flag which solutions are
+      assumptions we have NOT yet tested. Use indented bullets.
+  - model_name: Claude Opus 4.8
+    provider: Claude
+    why: >-
+      Best when the findings are ambiguous and you need careful reasoning about
+      what the evidence actually supports. Tags keep findings and task distinct.
+    prompt: |-
+      <findings>
+      {paste discovery findings}
+      </findings>
+      <task>
+      Build an opportunity-solution tree. For each opportunity, rate how strong
+      the evidence is (strong / mixed / thin) and say what would make it
+      stronger. Mark every solution that rests on an untested assumption with
+      [ASSUMPTION].
+      </task>
+davids_take: >-
+  The non-negotiable instruction is "flag the untested assumptions" — without
+  it a model presents guesses with the same confidence as evidence, and that's
+  how teams build the wrong thing. When my findings live in research PDFs or
+  docs, I pull them together on Gemini 3.1 Pro first; when the call is genuinely
+  ambiguous, I move to Opus to challenge what the evidence actually supports.

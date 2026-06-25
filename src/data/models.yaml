@@ -1,0 +1,399 @@
+# =============================================================================
+# MODEL FACTS — single source of truth.
+#
+# HOW TO UPDATE (the 10-minute ritual):
+#   1. Open the provider's official models/pricing page (source_url below).
+#   2. Fix any changed field (pricing, status, context window).
+#   3. Bump `last_verified` to today's date (YYYY-MM-DD).
+#   4. Add a line to CHANGELOG.md. Commit. The site redeploys itself.
+#
+# The `davids_take` fields are David's own field notes — the un-copyable part of
+# this guide. Keep them first-person and specific; that's the moat. (Gemini 3.5
+# Pro carries a candid "not tested yet" note instead of a borrowed take.)
+# =============================================================================
+
+# ----------------------------- CLAUDE (Anthropic) ----------------------------
+- id: claude-opus-4-8
+  name: Claude Opus 4.8
+  provider: Claude
+  vendor: Anthropic
+  tier: flagship
+  tagline: Maximum reasoning for complex, long-horizon product work.
+  context_window: 200K tokens
+  pricing:
+    input: $5 / 1M tokens
+    output: $25 / 1M tokens
+  best_for:
+    - Deep reasoning over messy, multi-source product context
+    - Long-horizon agentic work (multi-step research, doc generation)
+    - High-stakes synthesis where nuance matters more than speed
+  prompting_quirks:
+    - title: Rewards explicit structure with XML-style tags
+      detail: >-
+        Wrap distinct inputs in tags like <context>, <transcript>, <task>.
+        Claude follows the boundaries you draw far more reliably than prose
+        separators — and it cuts re-reads, so you spend fewer tokens.
+    - title: Tell it the role and the stakes, not just the task
+      detail: >-
+        "You are reviewing this PRD for an exec audience; flag anything that
+        wouldn't survive a CFO question" outperforms "review this PRD."
+    - title: Ask for the thinking, then the answer
+      detail: >-
+        Let it reason in a <scratchpad> before the final output when the task
+        is genuinely hard. For simple tasks, skip it — it just burns tokens.
+  example:
+    label: PRD critique (exec-ready)
+    prompt: |-
+      <role>You are a seasoned CPO reviewing a PRD before it goes to the board.</role>
+      <prd>
+      {paste your PRD here}
+      </prd>
+      <task>
+      Identify the three weakest assumptions. For each: why it's risky, the
+      one question an investor would ask, and how I'd de-risk it in a week.
+      Be blunt. Bullet points only.
+      </task>
+  davids_take: >-
+    My strategic sparring partner — the prompt I lean on most is literally "what
+    caveat or risk am I missing in this long-term strategy?" Its attention to
+    detail makes it the best model I've found for challenging product
+    assumptions before anyone else does. Lately I also use it to spin up
+    interactive slide decks from a few lines of intent, and to build the skills
+    and multi-agent workflows that are becoming my Product Operating System.
+  status: ga
+  last_verified: '2026-06-24'
+  source_url: https://platform.claude.com/docs/en/about-claude/models/overview
+  sort: 1
+
+- id: claude-sonnet-4-6
+  name: Claude Sonnet 4.6
+  provider: Claude
+  vendor: Anthropic
+  tier: balanced
+  tagline: The everyday workhorse — most of your prompts should start here.
+  context_window: 200K tokens
+  pricing:
+    input: $3 / 1M tokens
+    output: $15 / 1M tokens
+  best_for:
+    - Day-to-day drafting, rewriting, and summarising
+    - Fast iteration loops where you refine across several turns
+    - 80% of product workflows that don't need Opus-grade reasoning
+  prompting_quirks:
+    - title: Same structure tricks as Opus, lower cost
+      detail: >-
+        XML tags and explicit roles work identically. Reach for Sonnet first
+        and only escalate to Opus when the answer genuinely disappoints.
+    - title: Give it an output format up front
+      detail: >-
+        Specify "answer as a 5-row table" or "max 120 words" in the prompt.
+        Sonnet honours format constraints tightly, which keeps outputs short
+        and cheap.
+  example:
+    label: Summarise interview notes into insights
+    prompt: |-
+      <notes>
+      {paste raw interview notes}
+      </notes>
+      Pull out the top 5 user pains. For each: a one-line quote that evidences
+      it, and how often it appeared. Table only, no preamble.
+  davids_take: >-
+    My daily driver. It's where I synthesise the real intent behind a roadmap,
+    or drill down from a dashboard to the product metrics that actually matter.
+    Most everyday product work lands here — fast enough to stay in flow, sharp
+    enough that I rarely need to escalate.
+  status: ga
+  last_verified: '2026-06-24'
+  source_url: https://platform.claude.com/docs/en/about-claude/models/overview
+  sort: 2
+
+- id: claude-haiku-4-5
+  name: Claude Haiku 4.5
+  provider: Claude
+  vendor: Anthropic
+  tier: fast
+  tagline: Fast and cheap — for high-volume, well-defined tasks.
+  context_window: 200K tokens
+  pricing:
+    input: $1 / 1M tokens
+    output: $5 / 1M tokens
+  best_for:
+    - Classifying, tagging, or extracting at volume
+    - Quick reformatting and lightweight rewrites
+    - Anything you'd run hundreds of times where cost compounds
+  prompting_quirks:
+    - title: Be concrete; don't ask it to reason its way to a judgement
+      detail: >-
+        Give Haiku a crisp rubric and clear examples. It's excellent at
+        following instructions, weaker at open-ended judgement.
+    - title: One job per prompt
+      detail: >-
+        Split a complex task into narrow steps rather than one sprawling
+        instruction. Haiku is reliable when the target is unambiguous.
+  example:
+    label: Tag feedback by theme
+    prompt: |-
+      Classify each feedback line into exactly one theme:
+      [onboarding, pricing, performance, bug, feature-request, other].
+      Output as "line | theme". No explanations.
+      <feedback>
+      {paste feedback lines}
+      </feedback>
+  davids_take: >-
+    My go-to for the daily, repetitive work: drafting emails, finding the right
+    slot for a stakeholder catch-up, a quick web search to grab a reference or a
+    quote. Fast, cheap, and more than enough when the task is well-defined —
+    there's no reason to spend a flagship on it.
+  status: ga
+  last_verified: '2026-06-24'
+  source_url: https://platform.claude.com/docs/en/about-claude/models/overview
+  sort: 3
+
+# ----------------------------- CHATGPT (OpenAI) ------------------------------
+- id: gpt-5-5-thinking
+  name: GPT-5.5 Thinking
+  provider: ChatGPT
+  vendor: OpenAI
+  tier: reasoning
+  tagline: OpenAI's deliberate reasoner for hard, multi-step problems.
+  context_window: Large (see OpenAI docs)
+  pricing:
+    input: See OpenAI pricing
+    output: See OpenAI pricing
+    note: Not available on the free tier.
+  best_for:
+    - Multi-step analysis, trade-off reasoning, planning
+    - Problems where a quick answer is usually wrong
+    - Code and data tasks that need a worked-through approach
+  prompting_quirks:
+    - title: Don't tell it to "think step by step"
+      detail: >-
+        Reasoning models already do this internally. Step-by-step boilerplate
+        adds tokens and can make output more verbose, not better. State the
+        goal and the constraints instead.
+    - title: Give it the success criteria, then get out of the way
+      detail: >-
+        "Optimise for X, here are the constraints, here's what done looks like"
+        beats a long procedural script. Let it find the path.
+  example:
+    label: Pressure-test a prioritisation
+    prompt: |-
+      Here is our Q3 roadmap and the reasoning behind the ranking:
+      {paste roadmap + rationale}
+      Find the weakest link in this prioritisation. What are we assuming that,
+      if false, would flip the order? Give me the single highest-leverage
+      thing to validate first and why.
+  davids_take: >-
+    My pick for deep research — the most complete reports I get come from here,
+    and it earns trust by asking the right questions before it starts rather
+    than guessing. I also use it as a second pair of eyes on whatever I've built
+    with Claude Opus 4.8: cross-checking one frontier reasoner against another
+    catches things either would miss alone.
+  status: ga
+  last_verified: '2026-06-24'
+  source_url: https://platform.openai.com/docs/models
+  sort: 4
+
+- id: gpt-5-5-instant
+  name: GPT-5.5 Instant
+  provider: ChatGPT
+  vendor: OpenAI
+  tier: balanced
+  tagline: The default ChatGPT model — fast, dependable, broadly capable.
+  context_window: Large (see OpenAI docs)
+  pricing:
+    input: See OpenAI pricing
+    output: See OpenAI pricing
+    note: Rolling out as the default for all ChatGPT users.
+  best_for:
+    - Everyday drafting, rewriting, brainstorming
+    - Quick answers where latency matters
+    - The first model to try before escalating to Thinking
+  prompting_quirks:
+    - title: Use the system / custom-instructions slot
+      detail: >-
+        Persistent context (your role, your product, your tone) belongs in
+        custom instructions, not re-pasted every prompt. Saves tokens and keeps
+        outputs consistent.
+    - title: Front-load the constraint
+      detail: >-
+        Put the format and length limit in the first sentence. Instant is eager
+        to be helpful and will over-produce if you let it.
+  example:
+    label: Draft a release note
+    prompt: |-
+      Write a release note for this change. Audience: existing customers.
+      Tone: clear, no hype. Max 80 words. Lead with the user benefit.
+      Change: {describe the change}
+  davids_take: >-
+    Where I prototype quickly — especially to sanity-check whether a custom GPT
+    would actually add value for a team before anyone builds one ("is something
+    already doing this? for free?"). Also handy as a quick check that I'm
+    following OpenAI's current best practices, not last year's habits.
+  status: ga
+  last_verified: '2026-06-24'
+  source_url: https://platform.openai.com/docs/models
+  sort: 5
+
+- id: gpt-5-5-pro
+  name: GPT-5.5 Pro
+  provider: ChatGPT
+  vendor: OpenAI
+  tier: flagship
+  tagline: The high-effort tier for the most demanding tasks.
+  context_window: Large (see OpenAI docs)
+  pricing:
+    input: See OpenAI pricing
+    output: See OpenAI pricing
+    note: Available on Pro, Business, and Enterprise plans.
+  best_for:
+    - The hardest reasoning and analysis you'll throw at ChatGPT
+    - Long, complex documents and codebases
+    - When you'd rather wait and get it right
+  prompting_quirks:
+    - title: Reserve it for when the answer actually matters
+      detail: >-
+        Pro is slower and pricier. Use it for the 10% of tasks where depth
+        beats speed; default everything else to Instant or Thinking.
+    - title: Give it everything relevant up front
+      detail: >-
+        It rewards rich context. Paste the full brief, the constraints, and the
+        prior attempts rather than feeding it piecemeal.
+  example:
+    label: Strategy stress-test
+    prompt: |-
+      Here is our full product strategy and the market context:
+      {paste strategy + context}
+      Act as a skeptical board member. Where is this strategy most likely to
+      fail in the next 12 months? Give me the three scenarios that would kill
+      it and the leading indicator for each.
+  davids_take: >-
+    Honestly the model I reach for least. It's slow — but when I want to throw a
+    finished strategy doc at something powerful and watch where it cracks, Pro
+    is worth the wait. A specialist for the high-stakes stress-test, not a daily
+    driver.
+  status: ga
+  last_verified: '2026-06-24'
+  source_url: https://platform.openai.com/docs/models
+  sort: 6
+
+# ----------------------------- GEMINI (Google) -------------------------------
+- id: gemini-3-5-pro
+  name: Gemini 3.5 Pro
+  provider: Gemini
+  vendor: Google
+  tier: flagship
+  tagline: Google's most capable model — strongest at huge-context tasks.
+  context_window: Very large (1M+ tokens)
+  pricing:
+    input: See Google AI pricing
+    output: See Google AI pricing
+    note: Rolling out (June 2026) — verify availability before relying on it.
+  best_for:
+    - Reasoning across very large inputs (many docs at once)
+    - Multimodal product work (screens, diagrams, video)
+    - Research synthesis where breadth of context wins
+  prompting_quirks:
+    - title: Lean into the giant context window
+      detail: >-
+        Where other models need you to pre-summarise, Gemini can take the whole
+        corpus. Paste all the docs and ask the cross-cutting question directly.
+    - title: Anchor it with an explicit instruction at the end
+      detail: >-
+        With very long inputs, restate the actual task after the context so it
+        doesn't get lost. "Given everything above, do X" works well.
+  example:
+    label: Cross-document research synthesis
+    prompt: |-
+      {paste several research reports / transcripts / docs}
+
+      Given everything above: what are the three themes that show up across
+      more than one source? Cite which source each comes from. Ignore anything
+      that only appears once.
+  davids_take: >-
+    Straight answer: I haven't run this one in anger yet, so I'm not going to
+    fake a take. When I do, my notes land right here — that's the deal with this
+    guide: every take is earned, never borrowed.
+  status: rolling-out
+  status_note: Announced and rolling out as of June 2026 — confirm it's live in your account.
+  last_verified: '2026-06-24'
+  source_url: https://ai.google.dev/gemini-api/docs/models
+  sort: 7
+
+- id: gemini-3-5-flash
+  name: Gemini 3.5 Flash
+  provider: Gemini
+  vendor: Google
+  tier: fast
+  tagline: Fast, efficient, and great at high-volume real-world tasks.
+  context_window: Very large (1M tokens)
+  pricing:
+    input: See Google AI pricing
+    output: See Google AI pricing
+  best_for:
+    - Quick analysis across many documents
+    - Multi-step "prototyping" tasks at speed
+    - High-throughput work where cost-per-call matters
+  prompting_quirks:
+    - title: Keep instructions tight and goal-first
+      detail: >-
+        Flash is optimised for speed; a crisp, unambiguous ask gets a crisp
+        answer. Save the open-ended exploration for a Pro-tier model.
+    - title: Still takes big context — use it
+      detail: >-
+        You don't lose the large window by choosing Flash, so it's a strong
+        cheap option for "scan all of this and pull X."
+  example:
+    label: Quick competitive scan
+    prompt: |-
+      {paste 5–6 competitor pages or notes}
+      Build a comparison table: competitor | positioning | pricing model |
+      one differentiator. Keep each cell under 12 words.
+  davids_take: >-
+    A genuinely useful early-stage thinking partner — its suggested next steps
+    and actions land well, so I use it to test a train of thought or brainstorm
+    product ideas before moving the promising ones up to a more powerful model.
+  status: ga
+  last_verified: '2026-06-24'
+  source_url: https://ai.google.dev/gemini-api/docs/models
+  sort: 8
+
+- id: gemini-3-1-pro
+  name: Gemini 3.1 Pro
+  provider: Gemini
+  vendor: Google
+  tier: reasoning
+  tagline: Stable, capable reasoning — a dependable production choice.
+  context_window: Very large (1M+ tokens)
+  pricing:
+    input: See Google AI pricing
+    output: See Google AI pricing
+  best_for:
+    - Complex problem-solving where a simple answer isn't enough
+    - Production workflows that value stability over the newest release
+    - Advanced reasoning on hard, well-specified tasks
+  prompting_quirks:
+    - title: A safe default while 3.5 Pro stabilises
+      detail: >-
+        New flagships churn (and sometimes get pulled). When you need something
+        dependable to build on, a stable prior-gen Pro is often the smart call.
+    - title: Be explicit about depth
+      detail: >-
+        Tell it when you want thorough reasoning vs. a quick answer — it'll
+        match the effort to your stated need.
+  example:
+    label: Opportunity-solution mapping
+    prompt: |-
+      Here are our validated discovery findings:
+      {paste findings}
+      Map these into an opportunity-solution tree: the top opportunities, and
+      2–3 candidate solutions under each. Flag which solutions are assumptions
+      we haven't tested.
+  davids_take: >-
+    My first choice for documents. Scanning and analysing PDFs and Word files is
+    where it consistently beats everything else I've tried — when a job starts
+    with "read these and tell me what's in them," this is the one I open.
+  status: ga
+  last_verified: '2026-06-24'
+  source_url: https://ai.google.dev/gemini-api/docs/models
+  sort: 9

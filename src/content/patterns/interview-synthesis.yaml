@@ -1,0 +1,40 @@
+title: Synthesise user interviews into insights
+summary: Turn raw, messy interview notes into evidenced pains and themes — with quotes, not vibes.
+icon: 🎧
+order: 2
+intro: >-
+  The job here is pattern-finding across messy text, with traceability back to
+  evidence. Big-context models shine when you have many transcripts at once; a
+  balanced model is fine for a handful.
+variants:
+  - model_name: Gemini 3.5 Flash
+    provider: Gemini
+    why: >-
+      When you have a dozen transcripts, hand it the whole pile rather than
+      summarising each first — the huge context window means you skip the
+      pre-trimming step entirely, which is faster and cheaper.
+    prompt: |-
+      {paste all interview transcripts, separated by ---}
+
+      Across ALL transcripts above: list the top 5 recurring user pains. For
+      each, give one verbatim quote as evidence, which interview it came from,
+      and how many interviews mentioned it. Ignore anything that appears only
+      once. Table only.
+  - model_name: Claude Sonnet 4.6
+    provider: Claude
+    why: >-
+      Ideal for a handful of interviews where you want tight, well-evidenced
+      output. Tags keep the notes and the task separate; the format constraint
+      keeps it from rambling.
+    prompt: |-
+      <notes>
+      {paste raw interview notes}
+      </notes>
+      Pull out the top 5 user pains. For each: a one-line quote that evidences
+      it, and roughly how often it came up. Table only, no preamble.
+davids_take: >-
+  The discipline that matters is forcing a quote against every claim — it's the
+  difference between insight and confirmation bias. For a handful of interviews
+  this is the everyday synthesis I lean on Sonnet for; when I've got a whole
+  stack of transcripts I'll take a fast first read on Gemini Flash before
+  drilling in.

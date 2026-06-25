@@ -1,0 +1,280 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CopyBlock from '../components/CopyBlock.astro';
+import DavidsTake from '../components/DavidsTake.astro';
+import { withBase } from '../lib/url';
+
+const providerColor: Record<string, string> = {
+  Claude: 'var(--claude)',
+  ChatGPT: 'var(--chatgpt)',
+  Gemini: 'var(--gemini)',
+};
+
+// Cross-provider tier map. Claude has the cleanest three-way split; ChatGPT and
+// Gemini collapse "fast" and "balanced" into a single everyday model.
+const tierMap = [
+  {
+    tier: 'Fast & cheap',
+    blurb: 'High-volume, low-judgment tasks',
+    claude: 'Haiku 4.5',
+    chatgpt: 'GPT-5.5 Instant',
+    gemini: 'Gemini 3.5 Flash',
+  },
+  {
+    tier: 'Balanced',
+    blurb: 'Everyday drafting & synthesis',
+    claude: 'Sonnet 4.6',
+    chatgpt: 'GPT-5.5 Instant',
+    gemini: 'Gemini 3.5 Flash',
+  },
+  {
+    tier: 'Max reasoning',
+    blurb: 'Hard thinking & agentic work',
+    claude: 'Opus 4.8',
+    chatgpt: 'GPT-5.5 Thinking / Pro',
+    gemini: 'Gemini 3.5 Pro',
+  },
+];
+
+const cheatSheet = [
+  { task: 'Summarise, extract, classify, reformat at volume', tier: 'Fast' },
+  { task: 'Draft, rewrite, synthesise a handful of inputs', tier: 'Balanced' },
+  { task: 'Strategy, multi-step builds, deep analysis', tier: 'Max reasoning' },
+];
+---
+
+<Layout
+  title="Which model should you use? — ProductPrompts"
+  description="Match the model tier to the task: fast for summarising and extraction, balanced for everyday work, max reasoning for strategy and agentic builds. With real example queries."
+>
+  <div class="mx-auto max-w-3xl px-5 py-12">
+    <a
+      href={withBase('/')}
+      class="inline-flex items-center gap-1 text-sm font-medium text-slate-500 transition hover:text-brand-600"
+    >
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+      Home
+    </a>
+
+    <header class="mt-6">
+      <span class="text-xs font-bold uppercase tracking-wider text-brand-600"
+        >Right-size the model</span
+      >
+      <h1 class="mt-1 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
+        Which model should you use?
+      </h1>
+      <p class="mt-3 text-base leading-relaxed text-slate-600 dark:text-slate-300">
+        Every provider ships roughly three tiers. Matching the tier to the task
+        is the single biggest lever on cost — and reaching for the most powerful
+        model by reflex is the most common way to overspend. The rule:
+        <span class="font-semibold text-slate-800 dark:text-white"
+          >start balanced, escalate when the answer disappoints, drop to fast
+          for anything you run in bulk.</span
+        >
+      </p>
+    </header>
+
+    <!-- Cross-provider tier map -->
+    <section class="mt-9">
+      <h2 class="text-lg font-bold text-slate-900 dark:text-white">
+        The same three tiers, across providers
+      </h2>
+      <div
+        class="mt-3 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800"
+      >
+        <table class="w-full text-left text-sm">
+          <thead
+            class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-900 dark:text-slate-400"
+          >
+            <tr>
+              <th class="px-4 py-2.5 font-semibold">Tier</th>
+              <th class="px-4 py-2.5 font-semibold" style="color:var(--claude)">Claude</th>
+              <th class="px-4 py-2.5 font-semibold" style="color:var(--chatgpt)">ChatGPT</th>
+              <th class="px-4 py-2.5 font-semibold" style="color:var(--gemini)">Gemini</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+            {
+              tierMap.map((row) => (
+                <tr class="bg-white dark:bg-slate-950">
+                  <td class="px-4 py-3">
+                    <div class="font-bold text-slate-900 dark:text-white">{row.tier}</div>
+                    <div class="text-xs text-slate-500">{row.blurb}</div>
+                  </td>
+                  <td class="px-4 py-3 text-slate-700 dark:text-slate-300">{row.claude}</td>
+                  <td class="px-4 py-3 text-slate-700 dark:text-slate-300">{row.chatgpt}</td>
+                  <td class="px-4 py-3 text-slate-700 dark:text-slate-300">{row.gemini}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-2 text-xs text-slate-500">
+        Claude splits "fast" and "balanced" into two models (Haiku and Sonnet);
+        ChatGPT and Gemini fold both into one everyday model and reserve a
+        separate tier for heavy reasoning.
+      </p>
+    </section>
+
+    <!-- TIER 1 — FAST -->
+    <section class="mt-10">
+      <div class="flex items-center gap-2">
+        <span
+          class="rounded-full px-2.5 py-1 text-xs font-bold text-white"
+          style="background:var(--claude)">Fast &amp; cheap</span
+        >
+        <h2 class="text-xl font-bold text-slate-900 dark:text-white">
+          Low-reasoning, high-volume
+        </h2>
+      </div>
+      <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+        <span class="font-semibold">Summarising, extracting, classifying, reformatting</span> —
+        anything well-defined that you'd run many times. Give it a clear rubric,
+        not an open question. This is the tier people forget exists, and running
+        these jobs on a flagship model is just burning budget.
+      </p>
+      <p class="mt-4 text-xs font-semibold uppercase tracking-wide text-slate-400">
+        Example queries
+      </p>
+      <div class="mt-2 space-y-3">
+        <CopyBlock
+          label="Summarise"
+          code={"Summarise these notes into the 5 key points. One line each, no preamble.\n\n{paste your notes}"}
+        />
+        <CopyBlock
+          label="Extract"
+          code={"Find every place the old product name appears across these files so I can rename it. List file and line only — no commentary."}
+        />
+        <CopyBlock
+          label="Classify"
+          code={"Classify each feedback line into exactly one theme:\n[onboarding, pricing, performance, bug, feature-request, other].\nOutput \"line | theme\". No explanations.\n\n{paste feedback}"}
+        />
+      </div>
+      <div class="mt-4">
+        <DavidsTake
+          text="This is my daily-admin tier — drafting emails, finding a slot for a stakeholder catch-up, a quick web search to grab a reference. The moment a task is 'apply this rule to a lot of items,' drop down a tier: the quality is identical and the cost isn't close."
+        />
+      </div>
+    </section>
+
+    <!-- TIER 2 — BALANCED -->
+    <section class="mt-10">
+      <div class="flex items-center gap-2">
+        <span
+          class="rounded-full px-2.5 py-1 text-xs font-bold text-white"
+          style="background:var(--claude)">Balanced</span
+        >
+        <h2 class="text-xl font-bold text-slate-900 dark:text-white">
+          Your everyday default
+        </h2>
+      </div>
+      <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+        Drafting, rewriting, synthesising a handful of inputs, fast back-and-forth
+        iteration — roughly 80% of product work. Start here for almost everything
+        and only escalate when the output genuinely falls short.
+      </p>
+      <p class="mt-4 text-xs font-semibold uppercase tracking-wide text-slate-400">
+        Example queries
+      </p>
+      <div class="mt-2 space-y-3">
+        <CopyBlock
+          label="Brainstorm / iterate"
+          code={"I'm thinking of calling it \"ProdPrompts\" — help me brainstorm a sharper name. Give me 6 options across different angles, with a one-line rationale each, and your top pick."}
+        />
+        <CopyBlock
+          label="Research & synthesise"
+          code={"A competitor may already have a tool like the one I'm building. Double-check what they actually ship, then tell me — in a short table — how mine differs."}
+        />
+        <CopyBlock
+          label="Draft to spec"
+          code={"Draft a release note for this change. Audience: existing customers. Tone: clear, no hype. Max 80 words. Lead with the user benefit.\n\nChange: {describe the change}"}
+        />
+      </div>
+      <div class="mt-4">
+        <DavidsTake
+          text="My daily driver — synthesising the intent behind a roadmap, drilling from a dashboard down to the product metrics that matter. Most product work lands here. Start at this tier and only escalate when the output genuinely disappoints."
+        />
+      </div>
+    </section>
+
+    <!-- TIER 3 — MAX REASONING -->
+    <section class="mt-10">
+      <div class="flex items-center gap-2">
+        <span
+          class="rounded-full px-2.5 py-1 text-xs font-bold text-white"
+          style="background:var(--claude)">Max reasoning</span
+        >
+        <h2 class="text-xl font-bold text-slate-900 dark:text-white">
+          Hard thinking & agentic work
+        </h2>
+      </div>
+      <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+        Strategy, trade-offs, deep analysis, and long-horizon agentic builds —
+        multi-step tasks that run with autonomy and where a shallow answer is
+        expensive. Worth the wait and the cost for the 10–20% of work that
+        actually carries weight.
+      </p>
+      <p class="mt-4 text-xs font-semibold uppercase tracking-wide text-slate-400">
+        Example queries
+      </p>
+      <div class="mt-2 space-y-3">
+        <CopyBlock
+          label="Strategic evaluation"
+          code={"Evaluate this product idea: why it could matter for my career, how I'd get real traction, and where it could fail. Be candid, give a recommendation, and ask me anything you need.\n\n{describe the idea}"}
+        />
+        <CopyBlock
+          label="Long-horizon build"
+          code={"Build the whole thing: scaffold the site, wire up the pages and data, and verify it actually runs before you hand it back. Tell me what you checked."}
+        />
+        <CopyBlock
+          label="Deep analysis"
+          code={"Analyse how I've been prompting across our recent work and extract insights on when I get the best results — what's working, and where I could tighten."}
+        />
+      </div>
+      <div class="mt-4">
+        <DavidsTake
+          text="I reach up here when the input's ambiguous and a shallow answer is expensive — a strategy call, a multi-file build, a real analysis. With Claude that's Opus as my strategic challenger ('what risk am I missing?'); for the heaviest research I'll use GPT-5.5 Thinking and cross-check the two. A specialist you call in, not your daily driver."
+        />
+      </div>
+    </section>
+
+    <!-- Cheat sheet -->
+    <section class="mt-12">
+      <h2 class="text-lg font-bold text-slate-900 dark:text-white">The 10-second cheat sheet</h2>
+      <div
+        class="mt-3 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800"
+      >
+        <table class="w-full text-left text-sm">
+          <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+            {
+              cheatSheet.map((row) => (
+                <tr class="bg-white dark:bg-slate-950">
+                  <td class="px-4 py-3 text-slate-700 dark:text-slate-300">{row.task}</td>
+                  <td class="px-4 py-3 text-right font-bold text-brand-600 whitespace-nowrap">
+                    {row.tier}
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="mt-10 flex flex-wrap justify-center gap-3">
+      <a
+        href={withBase('/#models')}
+        class="rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700"
+      >
+        See each model's quirks →
+      </a>
+      <a
+        href={withBase('/best-practices')}
+        class="rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+      >
+        The fundamentals
+      </a>
+    </div>
+  </div>
+</Layout>

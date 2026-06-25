@@ -1,0 +1,37 @@
+---
+interface Props {
+  date: string; // ISO date string
+}
+const { date } = Astro.props;
+
+const parsed = new Date(date);
+const formatted = parsed.toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+});
+
+// Flag facts that haven't been re-checked in a while — freshness as a feature.
+const daysOld = Math.floor((Date.now() - parsed.getTime()) / 86_400_000);
+const stale = daysOld > 45;
+---
+
+<span
+  class:list={[
+    'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium',
+    stale
+      ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300'
+      : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
+  ]}
+  title={stale
+    ? `Last verified ${daysOld} days ago — may be due for a re-check.`
+    : `Verified against the provider's official docs on ${formatted}.`}
+>
+  <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20"
+    ><path
+      fill-rule="evenodd"
+      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+      clip-rule="evenodd"></path></svg
+  >
+  Verified {formatted}
+</span>

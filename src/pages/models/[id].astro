@@ -1,0 +1,181 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import CopyBlock from '../../components/CopyBlock.astro';
+import VerifiedBadge from '../../components/VerifiedBadge.astro';
+import DavidsTake from '../../components/DavidsTake.astro';
+import { withBase } from '../../lib/url';
+
+export async function getStaticPaths() {
+  const models = await getCollection('models');
+  return models.map((m) => ({ params: { id: m.id }, props: { model: m.data } }));
+}
+
+const { model } = Astro.props;
+
+const providerColor: Record<string, string> = {
+  Claude: 'var(--claude)',
+  ChatGPT: 'var(--chatgpt)',
+  Gemini: 'var(--gemini)',
+};
+const tierLabel: Record<string, string> = {
+  flagship: 'Flagship',
+  balanced: 'Balanced',
+  fast: 'Fast & cheap',
+  reasoning: 'Reasoning',
+};
+const accent = providerColor[model.provider];
+---
+
+<Layout
+  title={`${model.name} — prompting guide`}
+  description={`How to prompt ${model.name} (${model.vendor}) for product work: quirks, a copy-paste example, and when to use it.`}
+>
+  <div class="mx-auto max-w-3xl px-5 py-10">
+    <a
+      href={withBase('/#models')}
+      class="inline-flex items-center gap-1 text-sm font-medium text-slate-500 transition hover:text-brand-600"
+    >
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+      All models
+    </a>
+
+    <!-- Header -->
+    <header class="mt-5">
+      <div class="flex flex-wrap items-center gap-2">
+        <span
+          class="rounded-full px-2.5 py-1 text-xs font-bold text-white"
+          style={`background:${accent}`}>{model.provider}</span
+        >
+        <span
+          class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+          >{tierLabel[model.tier] ?? model.tier}</span
+        >
+        <VerifiedBadge date={model.last_verified} />
+      </div>
+      <h1 class="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+        {model.name}
+      </h1>
+      <p class="mt-1.5 text-lg text-slate-600 dark:text-slate-300">
+        {model.tagline}
+      </p>
+
+      {
+        model.status === 'rolling-out' && model.status_note && (
+          <p class="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800 dark:border-amber-500/30 dark:bg-amber-900/20 dark:text-amber-300">
+            ⚠ {model.status_note}
+          </p>
+        )
+      }
+    </header>
+
+    <!-- Quick facts -->
+    <dl class="mt-6 grid gap-3 sm:grid-cols-3">
+      <div
+        class="rounded-xl border border-slate-200 bg-white p-3.5 dark:border-slate-800 dark:bg-slate-900"
+      >
+        <dt class="text-xs font-semibold uppercase tracking-wide text-slate-400">
+          Maker
+        </dt>
+        <dd class="mt-0.5 text-sm font-semibold text-slate-800 dark:text-slate-200">
+          {model.vendor}
+        </dd>
+      </div>
+      <div
+        class="rounded-xl border border-slate-200 bg-white p-3.5 dark:border-slate-800 dark:bg-slate-900"
+      >
+        <dt class="text-xs font-semibold uppercase tracking-wide text-slate-400">
+          Context
+        </dt>
+        <dd class="mt-0.5 text-sm font-semibold text-slate-800 dark:text-slate-200">
+          {model.context_window}
+        </dd>
+      </div>
+      <div
+        class="rounded-xl border border-slate-200 bg-white p-3.5 dark:border-slate-800 dark:bg-slate-900"
+      >
+        <dt class="text-xs font-semibold uppercase tracking-wide text-slate-400">
+          Pricing
+        </dt>
+        <dd class="mt-0.5 text-sm font-semibold text-slate-800 dark:text-slate-200">
+          {model.pricing ? `${model.pricing.input} / ${model.pricing.output}` : 'See provider'}
+        </dd>
+      </div>
+    </dl>
+    {
+      model.pricing?.note && (
+        <p class="mt-2 text-xs text-slate-500">{model.pricing.note}</p>
+      )
+    }
+
+    <!-- Best for -->
+    <section class="mt-9">
+      <h2 class="text-lg font-bold text-slate-900 dark:text-white">Best for</h2>
+      <ul class="mt-3 space-y-2">
+        {
+          model.best_for.map((item) => (
+            <li class="flex items-start gap-2.5 text-sm text-slate-700 dark:text-slate-300">
+              <svg class="mt-0.5 h-4 w-4 shrink-0 text-brand-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z" clip-rule="evenodd" /></svg>
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- Prompting quirks -->
+    <section class="mt-9">
+      <h2 class="text-lg font-bold text-slate-900 dark:text-white">
+        Prompting quirks
+      </h2>
+      <div class="mt-3 space-y-3">
+        {
+          model.prompting_quirks.map((q) => (
+            <div class="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+              <h3 class="text-sm font-bold text-slate-900 dark:text-white">
+                {q.title}
+              </h3>
+              <p class="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                {q.detail}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Example -->
+    <section class="mt-9">
+      <h2 class="text-lg font-bold text-slate-900 dark:text-white">
+        Copy-paste example
+      </h2>
+      <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
+        Tuned for {model.name}. Swap in your own content where marked.
+      </p>
+      <div class="mt-3">
+        <CopyBlock code={model.example.prompt} label={model.example.label} />
+      </div>
+    </section>
+
+    <!-- David's take -->
+    {
+      model.davids_take && (
+        <section class="mt-9">
+          <DavidsTake text={model.davids_take} />
+        </section>
+      )
+    }
+
+    <!-- Source -->
+    <p class="mt-9 border-t border-slate-200 pt-5 text-xs text-slate-500 dark:border-slate-800">
+      Facts verified against the
+      <a
+        href={model.source_url}
+        target="_blank"
+        rel="noopener"
+        class="font-medium text-brand-600 hover:underline">official {model.vendor} docs</a
+      >
+      on {new Date(model.last_verified).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}.
+    </p>
+  </div>
+</Layout>

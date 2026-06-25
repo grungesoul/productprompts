@@ -1,0 +1,48 @@
+@import 'tailwindcss';
+
+/* Manual dark mode via a `.dark` class on <html> (toggle + system default). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+    Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', 'Fira Code',
+    Menlo, monospace;
+
+  /* Brand accent — a confident indigo→violet, easy to recolour later. */
+  --color-brand-50: #eef2ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-300: #a5b4fc;
+  --color-brand-400: #818cf8;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+}
+
+/* Per-provider accent colours, used on cards and badges. */
+:root {
+  --claude: #d97757; /* Anthropic terracotta */
+  --chatgpt: #10a37f; /* OpenAI green */
+  --gemini: #4285f4; /* Google blue */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Subtle dotted background that works in both themes. */
+.bg-dots {
+  background-image: radial-gradient(currentColor 0.5px, transparent 0.5px);
+  background-size: 22px 22px;
+}
+
+/* Prose tweaks for MDX pattern pages. */
+.prose-tweaks :where(h2) {
+  scroll-margin-top: 5rem;
+}

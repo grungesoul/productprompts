@@ -1,0 +1,36 @@
+title: Write crisp product comms
+summary: Exec updates and release notes that lead with the point — fast, in your tone, without the hype.
+icon: ✍️
+order: 6
+intro: >-
+  Most product comms are a fast, balanced-tier job. The whole game is
+  constraints: audience, length, and "lead with the benefit." Set them up front
+  and the model won't over-write.
+variants:
+  - model_name: GPT-5.5 Instant
+    provider: ChatGPT
+    why: >-
+      Quick and dependable for everyday drafting. Put your role and product in
+      custom instructions once, so you stop re-explaining context every time —
+      cheaper and more consistent.
+    prompt: |-
+      Write a release note for this change.
+      Audience: existing customers. Tone: clear, no hype. Max 80 words.
+      Lead with the user benefit, then what changed.
+      Change: {describe the change}
+  - model_name: Claude Sonnet 4.6
+    provider: Claude
+    why: >-
+      Honours length and format constraints tightly, so it's reliable for an
+      exec update that has to fit on one screen.
+    prompt: |-
+      Draft a weekly exec update from these notes:
+      {paste your raw notes}
+      Format: 3 bullets max — Shipped / Learned / Next. One sentence each.
+      Lead each bullet with the outcome, not the activity. No preamble.
+davids_take: >-
+  The single highest-leverage instruction is "lead with the outcome, not the
+  activity" — exec readers want the result first. This is everyday writing, so
+  it's a Sonnet or GPT-5.5 Instant job; I keep a standing custom-instruction
+  with my tone and context so every draft already sounds like me, and I check on
+  Instant now and then that I'm using those features the way OpenAI recommends.

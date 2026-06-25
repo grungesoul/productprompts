@@ -1,0 +1,39 @@
+title: Quick competitive scan
+summary: Go from a stack of competitor pages to a clean comparison table in one pass — cheaply.
+icon: 🔭
+order: 4
+intro: >-
+  This is a high-volume, well-defined extraction task — the textbook case for a
+  fast, cheap tier rather than a flagship. The win is a tight format constraint
+  so the output stays scannable and short.
+variants:
+  - model_name: Gemini 3.5 Flash
+    provider: Gemini
+    why: >-
+      Fast and able to take all the source pages at once, so you skip
+      summarising each. The tight cell limit keeps the table usable and the
+      output cheap.
+    prompt: |-
+      {paste 5–6 competitor pages or notes, separated by ---}
+      Build a comparison table with columns: competitor | positioning |
+      pricing model | one clear differentiator. Keep every cell under 12 words.
+      No commentary before or after the table.
+  - model_name: Claude Haiku 4.5
+    provider: Claude
+    why: >-
+      When you're running this repeatedly across many competitors, Haiku does
+      the extraction at a fraction of the cost. Give it a rubric, not an
+      open-ended question.
+    prompt: |-
+      Extract these fields for each competitor below:
+      name | positioning (≤10 words) | pricing model | primary audience.
+      Output one row per competitor, pipe-separated. No extra text.
+      <competitors>
+      {paste competitor descriptions}
+      </competitors>
+davids_take: >-
+  Competitive scans are where I most often catch teams overspending — this is a
+  Haiku or Flash job, not a flagship one. I use Haiku for the quick "find me the
+  reference, pull the pricing" lookups and Flash for a fast first pass across
+  several competitors. The trap is letting the model editorialise; the
+  cell-length cap is what keeps the output paste-ready for a deck.

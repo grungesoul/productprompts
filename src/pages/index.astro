@@ -1,0 +1,195 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import ModelCard from '../components/ModelCard.astro';
+import ModelFilter from '../components/ModelFilter.astro';
+import { withBase } from '../lib/url';
+
+const models = (await getCollection('models')).sort(
+  (a, b) => a.data.sort - b.data.sort
+);
+const patterns = (await getCollection('patterns')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+---
+
+<Layout>
+  <!-- ============================ HERO ============================ -->
+  <section class="relative overflow-hidden">
+    <div
+      class="bg-dots pointer-events-none absolute inset-0 text-slate-200 dark:text-slate-800"
+    >
+    </div>
+    <div
+      class="absolute -top-24 left-1/2 -z-10 h-72 w-[40rem] -translate-x-1/2 rounded-full bg-brand-300/30 blur-3xl dark:bg-brand-600/20"
+    >
+    </div>
+    <div class="relative mx-auto max-w-5xl px-5 pb-12 pt-20 text-center">
+      <span
+        class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-medium text-slate-600 backdrop-blur dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-300"
+      >
+        <span class="h-2 w-2 animate-pulse rounded-full bg-emerald-500"></span>
+        For product leaders & teams · Free & open source
+      </span>
+      <h1
+        class="mx-auto mt-6 max-w-3xl text-4xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-6xl dark:text-white"
+      >
+        Tune your prompt to <span class="text-brand-600">the model.</span>
+      </h1>
+      <p
+        class="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-300"
+      >
+        Prompting isn't one-size-fits-all. Each model — and each new version —
+        rewards a different style. This is the quick reference for getting the
+        output you actually expect from Claude, ChatGPT, and Gemini —
+        <span class="font-semibold text-slate-800 dark:text-white"
+          >in fewer tokens.</span
+        >
+      </p>
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <a
+          href="#models"
+          class="rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
+        >
+          Browse the models
+        </a>
+        <a
+          href="#patterns"
+          class="rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+        >
+          Product prompt patterns →
+        </a>
+      </div>
+
+      <!-- Value-prop strip -->
+      <div
+        class="mx-auto mt-14 grid max-w-3xl gap-4 sm:grid-cols-3"
+      >
+        {
+          [
+            {
+              t: 'Get what you expect',
+              d: 'Know each model’s quirks up front — fewer "that’s not what I meant" retries.',
+              icon: '◎',
+            },
+            {
+              t: 'Spend fewer tokens',
+              d: 'Leaner prompts and the right tier for the job cut cost on repetitive work.',
+              icon: '⊘',
+            },
+            {
+              t: 'Copy, paste, ship',
+              d: 'Real product examples — PRDs, research, roadmaps — not toy prompts.',
+              icon: '⇲',
+            },
+          ].map((c) => (
+            <div class="rounded-xl border border-slate-200 bg-white/60 p-4 text-left backdrop-blur dark:border-slate-800 dark:bg-slate-900/60">
+              <div class="text-xl text-brand-600">{c.icon}</div>
+              <h3 class="mt-1.5 text-sm font-bold text-slate-900 dark:text-white">
+                {c.t}
+              </h3>
+              <p class="mt-1 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
+                {c.d}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ MODELS ============================ -->
+  <section id="models" class="mx-auto max-w-5xl scroll-mt-20 px-5 py-12">
+    <div
+      class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
+    >
+      <div>
+        <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+          The models
+        </h2>
+        <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
+          Today's flagships. Each card carries a “last verified” date — models
+          change weekly.
+        </p>
+      </div>
+      <ModelFilter />
+    </div>
+
+    <div id="model-grid" class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {models.map((m) => <ModelCard model={m.data} />)}
+    </div>
+  </section>
+
+  <!-- ============================ PATTERNS ============================ -->
+  <section
+    id="patterns"
+    class="scroll-mt-20 border-y border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-900/40"
+  >
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <div class="max-w-2xl">
+        <span
+          class="text-xs font-bold uppercase tracking-wider text-brand-600"
+          >The product prompt library</span
+        >
+        <h2 class="mt-1 text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+          Patterns for real product work
+        </h2>
+        <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          Each pattern comes with model-tuned variants and a note on
+          <em>why</em> a given version is leaner or more reliable — so the token
+          saving is visible, not implied.
+        </p>
+      </div>
+
+      <div class="mt-8 grid gap-4 sm:grid-cols-2">
+        {
+          patterns.map((p) => (
+            <a
+              href={withBase(`/patterns/${p.id}`)}
+              class="group flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900"
+            >
+              <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-brand-50 text-xl text-brand-600 dark:bg-brand-500/10">
+                {p.data.icon}
+              </span>
+              <div>
+                <h3 class="font-bold text-slate-900 transition group-hover:text-brand-600 dark:text-white">
+                  {p.data.title}
+                </h3>
+                <p class="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                  {p.data.summary}
+                </p>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= BEST PRACTICES CTA ======================= -->
+  <section class="mx-auto max-w-5xl px-5 py-14">
+    <div
+      class="relative overflow-hidden rounded-2xl bg-slate-900 p-8 text-center dark:bg-slate-800"
+    >
+      <div
+        class="bg-dots pointer-events-none absolute inset-0 text-slate-700"
+      >
+      </div>
+      <div class="relative">
+        <h2 class="text-2xl font-bold text-white">
+          New to all this? Start with the fundamentals.
+        </h2>
+        <p class="mx-auto mt-2 max-w-xl text-sm text-slate-300">
+          Five model-agnostic habits that make every prompt better, before you
+          worry about which model you're on.
+        </p>
+        <a
+          href={withBase('/best-practices')}
+          class="mt-5 inline-block rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
+        >
+          Read the best practices
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
