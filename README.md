@@ -7,6 +7,10 @@ Gemini**, framed for **product work** — and built to spend **fewer tokens**.
 
 Built by [David Jordan](https://www.linkedin.com/in/davidjordansoro), Product Coach.
 
+### → [**View the live guide**](https://productprompts.vercel.app)
+
+No install needed — it's a website. Clone only if you want to develop it.
+
 ---
 
 ## What's inside
@@ -23,8 +27,7 @@ Built by [David Jordan](https://www.linkedin.com/in/davidjordansoro), Product Co
 ## Tech
 
 [Astro](https://astro.build) + [Tailwind CSS](https://tailwindcss.com), built to
-a static site and deployed to **GitHub Pages** via GitHub Actions. Free to host,
-no backend, no tracking.
+a static site and deployed on **Vercel**. Free to host, no backend, no tracking.
 
 ## Run locally
 
@@ -37,12 +40,14 @@ npm run preview  # preview the production build
 
 ## Deploy (one-time setup)
 
+Hosted on [Vercel](https://vercel.com): import the GitHub repo once, and every
+push to `main` redeploys automatically.
+
 1. Push this repo to GitHub (public).
-2. Edit the two lines at the top of `astro.config.mjs` — `SITE` and `BASE` —
-   to match your username and repo name.
-3. In **Settings → Pages → Build and deployment**, set **Source: GitHub Actions**.
-4. Push to `main`. The workflow in `.github/workflows/deploy.yml` builds and
-   publishes automatically. It's free for public repos.
+2. On Vercel, **Add New → Project → Import** this repo. The Astro preset is
+   auto-detected (build `astro build`, output `dist`) — nothing to configure.
+3. Deploy. Set `SITE` at the top of `astro.config.mjs` to your final URL so
+   absolute/OG links are correct.
 
 ---
 
