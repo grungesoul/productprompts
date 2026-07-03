@@ -7,6 +7,29 @@ intro: >-
   models are built for exactly this: trade-offs, sequencing, and "what are we
   missing." State the goal and constraints, then get out of the way.
 variants:
+  - model_name: Claude Fable 5
+    provider: Claude
+    why: >-
+      When the prioritisation rests on details — capacity numbers, dependency
+      chains, dates — Fable 5 checks the arithmetic behind the argument, not
+      just the argument. Give it everything in one complete brief rather than
+      drip-feeding context across turns. Expensive; reserve it for the roadmap
+      you're about to commit a quarter to.
+    prompt: |-
+      <context>
+      We're committing next quarter to this order. Capacity, dependencies, and
+      the reasoning behind the ranking are all included below.
+      </context>
+      <roadmap>
+      {paste roadmap + capacity + dependencies + rationale}
+      </roadmap>
+      <task>
+      Pressure-test this at the detail level, not just the strategy level:
+      dependencies that break the sequence, capacity math that doesn't add up,
+      items whose rationale contradicts another item's, and the single
+      assumption that flips the order if it's wrong. For each: the evidence in
+      the doc, the impact, and what to check before we commit.
+      </task>
   - model_name: GPT-5.5 Thinking
     provider: ChatGPT
     why: >-
@@ -39,5 +62,8 @@ davids_take: >-
   Opus is my first challenger — its attention to detail surfaces the assumption
   that, if wrong, flips the whole order. Then GPT-5.5 Thinking is the second
   opinion; cross-checking one reasoner against the other is how I pressure-test
-  a roadmap I actually care about. One habit to drop: "think step by step" is
-  just noise on a reasoning model.
+  a roadmap I actually care about. New since Fable 5 came back: when the
+  ranking hinges on capacity math and dependency chains, it gets the detail
+  pass — token-hungry, but that's exactly where one missed detail flips the
+  order. One habit to drop: "think step by step" is just noise on a reasoning
+  model.

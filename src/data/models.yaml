@@ -13,6 +13,64 @@
 # =============================================================================
 
 # ----------------------------- CLAUDE (Anthropic) ----------------------------
+- id: claude-fable-5
+  name: Claude Fable 5
+  provider: Claude
+  vendor: Anthropic
+  tier: flagship
+  tagline: The detail obsessive — Anthropic's most capable model, above Opus.
+  context_window: 1M tokens
+  pricing:
+    input: $10 / 1M tokens
+    output: $50 / 1M tokens
+    note: Roughly 2× Opus per token — and it thinks a lot. Budget accordingly.
+  best_for:
+    - Attention-to-detail work — slide deck design, strategy analysis, prototypes
+    - Long-horizon autonomous runs that must hold quality over many steps
+    - Thought companion for deep artifact analysis (decks, strategy docs, models)
+  prompting_quirks:
+    - title: Thinking is always on — don't script the steps
+      detail: >-
+        Reasoning can't be turned off, so drop the "think step by step"
+        boilerplate and the step-by-step scaffolding you wrote for older
+        models. State the goal, the constraints, and what done looks like —
+        over-prescriptive prompts actually reduce its output quality.
+    - title: Control depth with effort, not word count
+      detail: >-
+        Its dial is the effort parameter (low → max), not longer prompts.
+        High effort buys rigorous self-verification on hard work; on routine
+        tasks it just deliberates expensively — turn it down or switch model.
+    - title: Expect long turns — and give it the whole brief up front
+      detail: >-
+        A single hard request can run minutes while it gathers context,
+        builds, and checks its own work. It rewards one well-specified brief
+        far more than drip-fed instructions across turns.
+  example:
+    label: Strategy detail audit
+    prompt: |-
+      <strategy>
+      {paste the full strategy doc or deck outline}
+      </strategy>
+      <task>
+      Audit this for the details everyone else will miss: internal
+      contradictions, numbers that don't reconcile, claims with no owner or
+      date, and slides that say nothing. For each finding: where it is, why
+      it matters, and the exact rewrite. Be exhaustive — I'd rather filter
+      than miss one.
+      </task>
+  davids_take: >-
+    The attention-to-detail specialist: slide deck design, strategy analysis,
+    building a prototype — anything where one missed detail costs you, this is
+    the model. Two caveats. It burns tokens like hell. And for straightforward
+    tasks — deep research, web search, summarizing — it won't make a real
+    difference over cheaper models, so don't waste it there. Where I do bring
+    it in beyond detail work: as a thought companion when I'm dissecting an
+    artifact and want a second brain on it.
+  status: ga
+  last_verified: '2026-07-03'
+  source_url: https://platform.claude.com/docs/en/about-claude/models/overview
+  sort: 0
+
 - id: claude-opus-4-8
   name: Claude Opus 4.8
   provider: Claude

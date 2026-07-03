@@ -7,6 +7,26 @@ intro: >-
   skeptic before your stakeholders do. The flagship models reason hardest about
   hidden risk; a balanced model is plenty for a first tidy-up.
 variants:
+  - model_name: Claude Fable 5
+    provider: Claude
+    why: >-
+      The final pass for the PRD that actually goes to the board. It reads the
+      whole document like a detail obsessive — reconciling numbers, owners,
+      dates across sections — instead of sampling the highlights. Hand it the
+      complete doc in one brief and skip the scaffolding; it burns tokens, so
+      this is the last pass, not the first.
+    prompt: |-
+      <role>You are the most detail-obsessed reviewer in the company. This PRD goes to the board tomorrow.</role>
+      <prd>
+      {paste the full PRD — don't trim it}
+      </prd>
+      <task>
+      Full detail audit. Find everything the room will catch: numbers that
+      don't reconcile, claims with no evidence, success metrics nobody owns,
+      sections that contradict each other, and the assumptions hiding inside
+      confident sentences. For each finding: where it is, why it matters, and
+      the exact fix. Be exhaustive — I'd rather filter your list than miss one.
+      </task>
   - model_name: Claude Opus 4.8
     provider: Claude
     why: >-
@@ -52,4 +72,7 @@ davids_take: >-
   weak assumption before a stakeholder does. My flow: draft and tidy on Sonnet,
   then hand the finished PRD to Opus with "what's the riskiest assumption here,
   and what would an investor ask?" If it's a genuine bet, I run it past GPT-5.5
-  Thinking too — a second frontier reasoner catches what the first misses.
+  Thinking too — a second frontier reasoner catches what the first misses. And
+  when the PRD actually goes to the board, Fable 5 gets the final detail pass:
+  it catches what Opus and I both skimmed past. Expensive, so it's the last
+  pass, never the first.

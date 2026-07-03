@@ -3,6 +3,14 @@
 A human-readable log of model-roster changes. Update this whenever you touch
 `src/data/models.yaml` so the "freshness" of the guide is auditable.
 
+## 2026-07-03 — Claude Fable 5 added
+
+- **Claude Fable 5** (Anthropic) added to the roster, top of the Claude column —
+  access restrictions lifted; now GA. $10/$50 per 1M tokens, 1M context,
+  always-on reasoning. David's take: the attention-to-detail specialist
+  (deck design, strategy analysis, prototypes) and artifact-analysis thought
+  companion; skip it for routine research/search/summarizing — it burns tokens.
+
 ## 2026-06-24 — Initial roster
 
 - Seeded the guide with today's flagships, verified against each provider's
